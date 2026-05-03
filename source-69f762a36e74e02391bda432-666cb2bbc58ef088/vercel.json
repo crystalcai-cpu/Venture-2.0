@@ -1,13 +1,17 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": ".",
-  "public": "dist/client",
+  "outputDirectory": "dist/client",
   "env": {
     "NODE_ENV": "production"
   },
+  "functions": {
+    "api/**/*.js": {
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!_next/static|_next/image|assets|favicon.ico).*)",
       "destination": "/api"
     }
   ],
@@ -22,7 +26,7 @@
       ]
     },
     {
-      "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|ttf|woff|woff2))",
+      "source": "/(.*\\.(js|css|webp|webm|gif|svg|ico|ttf|woff|woff2)$)",
       "headers": [
         {
           "key": "Cache-Control",

@@ -1,60 +1,68 @@
-// This is a Vercel serverless function that handles all requests
-// It delegates to the TanStack Start server
-
-// Import the built server (this will be dynamically required at runtime)
-let serverModule
+// Vercel serverless function handler for TanStack Start SSR server
+let server;
 
 async function getServer() {
-  if (!serverModule) {
-    serverModule = await import('../dist/server/server.js')
+  if (!server) {
+    try {
+      const mod = await import('../dist/server/server.js');
+      server = mod.default;
+      console.log('Server loaded successfully');
+    } catch (err) {
+      console.error('Failed to load server:', err);
+      throw err;
+    }
   }
-  return serverModule.default
+  return server;
 }
 
 export default async (req, res) => {
   try {
-    const server = await getServer()
+    const srv = await getServer();
     
-    // Build the URL from the request
-    const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`)
-    
-    // Create a fetch Request object
+    // Build the request URL
+    const protocol = req.headers['x-forwarded-proto'] || 'http';
+    const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost';
+    const url = new URL(req.url || '/', `${protocol}://${host}`);
+
+    // Create a fetch-compatible request
     const request = new Request(url, {
       method: req.method,
       headers: req.headers,
       body: ['GET', 'HEAD'].includes(req.method) ? undefined : req,
-    })
-    
-    // Call the server's fetch handler
-    const response = await server.fetch(request)
-    
-    // Set response status
-    res.statusCode = response.status
-    
-    // Copy headers from the response
+    });
+
+    // Get the response from the server
+    const response = await srv.fetch(request);
+
+    // Set response status and headers
+    res.statusCode = response.status;
     response.headers.forEach((value, key) => {
-      res.setHeader(key, value)
-    })
-    
-    // Handle the response body
+      res.setHeader(key, value);
+    });
+
+    // Stream or send the response body
     if (response.body) {
-      const reader = response.body.getReader()
+      const reader = response.body.getReader();
       try {
         while (true) {
-          const { done, value } = await reader.read()
-          if (done) break
-          res.write(value)
+          const { done, value } = await reader.read();
+          if (done) break;
+          res.write(Buffer.from(value));
         }
       } finally {
-        reader.releaseLock()
+        reader.releaseLock();
       }
     }
-    
-    res.end()
+
+    res.end();
   } catch (error) {
-    console.error('Server error:', error)
-    res.statusCode = 500
-    res.end(JSON.stringify({ error: 'Internal Server Error' }))
+    console.error('Error handling request:', error);
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({
+      error: 'Internal Server Error',
+      message: error?.message || 'Unknown error'
+    }));
   }
 }
 
