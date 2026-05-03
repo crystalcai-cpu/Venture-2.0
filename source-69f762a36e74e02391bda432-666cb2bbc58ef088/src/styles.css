@@ -1,0 +1,552 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+@import "tailwindcss" source("../");
+
+/* ─── Design Tokens ──────────────────────────────────────────────────── */
+:root {
+  --bg:           #050505;
+  --surface:      #0C0C0D;
+  --card:         #111112;
+  --card-hover:   #161618;
+  --border:       #1F1F21;
+  --border-light: #2A2A2C;
+  --gold:         #D4AF37;
+  --gold-dim:     #B8952A;
+  --gold-muted:   rgba(212, 175, 55, 0.10);
+  --gold-glow:    rgba(212, 175, 55, 0.20);
+  --text:         #F0EBE0;
+  --text-secondary: #9A9A9A;
+  --text-muted:   #5A5A5C;
+  --red:          #E05252;
+  --green:        #4CAF7D;
+  --radius:       6px;
+  --radius-lg:    12px;
+  --radius-xl:    18px;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Typography ─────────────────────────────────────────────────────── */
+.font-display {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+.font-mono-data {
+  font-family: 'Space Mono', monospace;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+/* ─── Gold Gradient Text ─────────────────────────────────────────────── */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #D4AF37 0%, #F0D060 40%, #D4AF37 70%, #B8952A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Gold Shimmer Animation ─────────────────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, var(--border) 25%, var(--border-light) 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ─── Button Styles ──────────────────────────────────────────────────── */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: var(--gold);
+  color: #050505;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  text-decoration: none;
+}
+
+.btn-gold:hover {
+  background: #E8C23A;
+  box-shadow: 0 0 24px var(--gold-glow);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 24px;
+  background: transparent;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  text-decoration: none;
+}
+
+.btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: var(--gold-muted);
+}
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(224, 82, 82, 0.1);
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(224, 82, 82, 0.25);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.btn-danger:hover { background: rgba(224, 82, 82, 0.2); }
+
+/* ─── Input Styles ───────────────────────────────────────────────────── */
+.input-dark {
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-dark::placeholder { color: var(--text-muted); }
+.input-dark:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-muted);
+}
+
+select.input-dark {
+  appearance: none;
+  cursor: pointer;
+}
+
+/* ─── Card Styles ────────────────────────────────────────────────────── */
+.card-dark {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.card-dark:hover {
+  border-color: var(--border-light);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+/* ─── Badge Styles ───────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.badge-gold {
+  background: var(--gold-muted);
+  color: var(--gold);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.badge-green {
+  background: rgba(76, 175, 125, 0.12);
+  color: var(--green);
+  border: 1px solid rgba(76, 175, 125, 0.2);
+}
+
+.badge-muted {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+/* ─── Tab Styles ─────────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.tab-item {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  border: none;
+  background: transparent;
+}
+
+.tab-item.active {
+  background: var(--card);
+  color: var(--gold);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.tab-item:hover:not(.active) {
+  color: var(--text);
+  background: rgba(255,255,255,0.04);
+}
+
+/* ─── Map Price Markers ──────────────────────────────────────────────── */
+.price-marker {
+  background: var(--bg);
+  color: var(--gold);
+  border: 1.5px solid var(--gold);
+  padding: 5px 10px;
+  border-radius: 100px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  letter-spacing: 0.02em;
+}
+
+.price-marker:hover,
+.price-marker.active {
+  background: var(--gold);
+  color: var(--bg);
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px var(--gold-glow);
+}
+
+/* ─── Leaflet Popup Override ─────────────────────────────────────────── */
+.leaflet-popup-content-wrapper {
+  background: var(--card) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6) !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-tip-container { display: none !important; }
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  width: 220px !important;
+}
+
+.popup-card img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  display: block;
+}
+
+.popup-info {
+  padding: 10px 12px;
+}
+
+.popup-title {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.popup-price {
+  margin: 0 0 2px;
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.popup-details {
+  margin: 0;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.leaflet-container {
+  background: #0A0A0B;
+}
+
+/* ─── Comparison Bar ─────────────────────────────────────────────────── */
+.compare-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--surface);
+  border-top: 1px solid var(--border-light);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  backdrop-filter: blur(12px);
+}
+
+/* ─── Checkbox Custom ─────────────────────────────────────────────────── */
+.checkbox-gold {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--border-light);
+  border-radius: 3px;
+  cursor: pointer;
+  background: transparent;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.checkbox-gold:checked {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.checkbox-gold:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: 2px solid #050505;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ─── Hero Noise Overlay ─────────────────────────────────────────────── */
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── Gold Divider ───────────────────────────────────────────────────── */
+.gold-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.gold-divider::before,
+.gold-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-light));
+}
+.gold-divider::after {
+  background: linear-gradient(to left, transparent, var(--border-light));
+}
+
+/* ─── Search Filter Sidebar ──────────────────────────────────────────── */
+.filter-section {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.filter-section:last-child {
+  border-bottom: none;
+}
+
+/* ─── Form Grid ──────────────────────────────────────────────────────── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── Transit Badge ──────────────────────────────────────────────────── */
+.transit-line {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Space Mono', monospace;
+  flex-shrink: 0;
+}
+
+/* ─── Amenity Pill ───────────────────────────────────────────────────── */
+.amenity-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.amenity-pill:hover {
+  border-color: var(--border-light);
+  color: var(--text);
+}
+
+/* ─── Page Transition ────────────────────────────────────────────────── */
+.page-enter {
+  animation: pageEnter 0.4s ease forwards;
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Rewards Estimator ──────────────────────────────────────────────── */
+.rewards-card {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.03) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+/* ─── Admin Table ────────────────────────────────────────────────────── */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-table td {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tr:hover td {
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+}
+
+/* ─── Modal ──────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(4px);
+}
+
+.modal-box {
+  background: var(--card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 760px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .split-search {
+    flex-direction: column;
+  }
+  .split-search .map-pane {
+    height: 360px;
+  }
+}
